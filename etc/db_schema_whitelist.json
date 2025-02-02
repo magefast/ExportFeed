@@ -1,0 +1,28 @@
+{
+    "exportfeed": {
+        "column": {
+            "exportfeed_id": true,
+            "name": true,
+            "type": true,
+            "filename": true,
+            "categories": true,
+            "sale_storename": true,
+            "customer_group": true,
+            "comment": true,
+            "status": true,
+            "store_id": true,
+            "export_rules": true,
+            "additional_settings_json": true,
+            "stop_sku": true,
+            "stop_manufacturers": true,
+            "brand_filter_category": true,
+            "price_settings_category": true
+        },
+        "index": {
+            "EXPORTFEED_EXPORTFEED_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

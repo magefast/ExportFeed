@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="exportfeed" resource="default" engine="innodb" comment="">
+        <column xsi:type="int" name="exportfeed_id" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="text" name="name" nullable="false"/>
+        <column xsi:type="int" name="status" unsigned="true" nullable="false" identity="false"/>
+        <column xsi:type="varchar" name="store_id" nullable="false"/>
+        <column xsi:type="varchar" name="type" nullable="false"/>
+        <column xsi:type="text" name="filename" nullable="false"/>
+        <column xsi:type="text" name="categories" nullable="false"/>
+        <column xsi:type="text" name="brand_filter_category" nullable="false"/>
+        <column xsi:type="text" name="price_settings_category" nullable="false"/>
+        <column xsi:type="text" name="sale_storename" nullable="false"/>
+        <column xsi:type="text" name="customer_group" nullable="false"/>
+        <column xsi:type="text" name="export_rules" nullable="false"/>
+        <column xsi:type="text" name="additional_settings_json" nullable="false"/>
+        <column xsi:type="text" name="stop_sku" nullable="false"/>
+        <column xsi:type="text" name="stop_manufacturers" nullable="false"/>
+        <column xsi:type="text" name="comment" nullable="false"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="exportfeed_id"/>
+        </constraint>
+        <index referenceId="EXPORTFEED_EXPORTFEED_ID" indexType="btree">
+            <column name="exportfeed_id"/>
+        </index>
+    </table>
+</schema>

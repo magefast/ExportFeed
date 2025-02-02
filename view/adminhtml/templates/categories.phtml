@@ -1,0 +1,287 @@
+<?php
+
+use Magefast\ExportFeed\Helper\Data;
+
+$helper = $this->helper(Data::class);
+
+$categoriesLevel1 = $helper->getCategoriesLevel1();
+$brandsArray = $helper->getManufacturerOption();
+$brandsInCategoryArray = $helper->getBrandsInCategoryArray();
+$priceGroupArray = $helper->getCustomerGroupsOption();
+
+$adminFormData = $helper->getAdminFormData();
+$categoriesIdArray = $adminFormData['categoriesIdArray'];
+$brandFilterIdArray = $adminFormData['brandFilterIdArray'];
+$priceGroupIdArray = $adminFormData['priceGroupIdArray'];
+?>
+<div class="entry-edit form-inline">
+    <fieldset class="fieldset admin__fieldset " id="feed_base_fieldset">
+        <legend class="admin__legend legend">
+            <span><?=__('Categories Settings for Export') ?></span>
+        </legend>
+        <br>
+        <div class="messages"></div>
+        <div>
+            <table width="100%">
+                <tr>
+                    <td>
+                        <?php
+                        //padding
+                        $i = 20;
+
+                        if (count($categoriesLevel1) > 0): ?>
+                            <ul class="feed-export-categories-settings-list">
+                                <?php foreach ($categoriesLevel1 as $categories1sub): ?>
+                                    <li style="margin-left: <?= $i; ?>px; background-color: #B0B0B0;">
+                                        <input id="id<?= $categories1sub['id'] ?>" type="checkbox"
+                                               <?php if (isset($categoriesIdArray[$categories1sub['id']])): ?>checked="checked" <?php endif; ?>
+                                               name="cats[]"
+                                               value="<?= $categories1sub['id'] ?>">
+                                        <label for="id<?= $categories1sub['id'] ?>"><?= $categories1sub['name'] ?>
+                                            [<?= $categories1sub['id'] ?>]</label>
+
+                                        <div id="id<<?= $categories1sub['id'] ?>brandfilter"
+                                             class="brand-filter">
+                                            <select name="brand-filter-id<?= $categories1sub['id'] ?>[]"
+                                                    multiple size="5" class="brand-filter">
+                                                <?php foreach ($brandsArray as $brand):
+                                                    if (isset($brandsInCategoryArray[$brand['value']])) {
+                                                        if (!isset($brandsInCategoryArray[$brand['value']][$categories1sub['id']])) {
+                                                            continue;
+                                                        }
+                                                    } else {
+                                                        continue;
+                                                    }
+                                                    ?>
+                                                    <option
+                                                        <?php if (isset($brandFilterIdArray[$categories1sub['id']][$brand['value']])): ?>selected="1"<?php endif; ?>
+                                                        value="<?= $brand['value']; ?>"><?= $brand['label']; ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+
+                                        <div id="id<?= $categories1sub['id']; ?>pricesettings"
+                                             class="price-settings">
+                                            <label><?= __('Price group:') ?></label>
+                                            <select name="price-settings-id<?= $categories1sub['id']; ?>">
+                                                <?php foreach ($priceGroupArray as $pg): ?>
+                                                    <option
+                                                        <?php if (isset($priceGroupIdArray[$categories1sub['id']]) && $priceGroupIdArray[$categories1sub['id']] == $pg['value']): ?>selected="1"<?php endif; ?>
+                                                        value="<?= $pg['value']; ?>"><?= $pg['label']; ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+
+
+                                        <?php
+                                        $catLevel2 = $helper->getCategoriesLevelParent($categories1sub['id']);
+
+                                        if (count($catLevel2) > 0): ?>
+                                            <ul>
+                                                <?php $i2 = $i + 20;
+                                                foreach ($catLevel2 as $c2sub): ?>
+                                                    <li style="margin-left: <?= $i2; ?>px; background-color: #BEBEBE;">
+                                                        <input id="id<?= $c2sub['id']; ?>"
+                                                            <?php if (isset($categoriesIdArray[$c2sub['id']])): ?> checked="checked" <?php endif; ?>
+                                                               type="checkbox" name="cats[]"
+                                                               value="<?= $c2sub['id']; ?>">
+                                                        <label
+                                                            for="id<?= $c2sub['id']; ?>"><?= $c2sub['name'] ?>
+                                                            [<?= $c2sub['id']; ?>]</label>
+
+                                                        <div id="id<?= $c2sub['id']; ?>brandfilter"
+                                                             class="brand-filter">
+                                                            <select name="brand-filter-id<?= $c2sub['id']; ?>[]"
+                                                                    multiple size="5">
+                                                                <?php foreach ($brandsArray as $brand):
+
+                                                                    if (isset($brandsInCategoryArray[$brand['value']])) {
+                                                                        if (!isset($brandsInCategoryArray[$brand['value']][$c2sub['id']])) {
+                                                                            continue;
+                                                                        }
+                                                                    } else {
+                                                                        continue;
+                                                                    }
+
+                                                                    ?>
+                                                                    <option
+                                                                        <?php if (isset($brandFilterIdArray[$c2sub['id']][$brand['value']])): ?>selected="1"<?php endif; ?>
+                                                                        value="<?= $brand['value']; ?>"><?= $brand['label']; ?></option>
+                                                                <?php endforeach; ?>
+                                                            </select>
+                                                        </div>
+
+                                                        <div id="id<?= $c2sub['id']; ?>pricesettings"
+                                                             class="price-settings">
+                                                            <label><?= __('Price group:') ?></label>
+                                                            <select name="price-settings-id<?= $c2sub['id']; ?>">
+                                                                <?php foreach ($priceGroupArray as $pg): ?>
+                                                                    <option
+                                                                        <?php if (isset($priceGroupIdArray[$c2sub['id']]) && $priceGroupIdArray[$c2sub['id']] == $pg['value']): ?>selected="1"<?php endif; ?>
+                                                                        value="<?= $pg['value']; ?>"><?= $pg['label']; ?></option>
+                                                                <?php endforeach; ?>
+                                                            </select>
+                                                        </div>
+
+
+                                                        <?php
+                                                        $catLevel3 = $helper->getCategoriesLevelParent($c2sub['id']);
+                                                        if (count($catLevel3) > 0): ?>
+
+                                                            <ul>
+                                                                <?php $i3 = $i2 + 20;
+                                                                foreach ($catLevel3 as $c3sub): ?>
+                                                                    <li style="margin-left: <?= $i3; ?>px; background-color: #C8C8C8;">
+                                                                        <input
+                                                                            id="id<?= $c3sub['id']; ?>"
+                                                                            <?php if (isset($categoriesIdArray[$c3sub['id']])): ?> checked="checked" <?php endif; ?>
+                                                                            type="checkbox" name="cats[]"
+                                                                            value="<?= $c3sub['id']; ?>">
+                                                                        <label
+                                                                            for="id<?= $c3sub['id']; ?>"><?= $c3sub['name'] ?>
+                                                                            [<?= $c3sub['id']; ?>]</label>
+
+                                                                        <div id="id<?= $c3sub['id']; ?>brandfilter"
+                                                                             class="brand-filter">
+                                                                            <select
+                                                                                name="brand-filter-id<?= $c3sub['id']; ?>[]"
+                                                                                multiple size="5">
+                                                                                <?php foreach ($brandsArray as $brand):
+
+                                                                                    if (isset($brandsInCategoryArray[$brand['value']])) {
+                                                                                        if (!isset($brandsInCategoryArray[$brand['value']][$c3sub['id']])) {
+                                                                                            continue;
+                                                                                        }
+                                                                                    } else {
+                                                                                        continue;
+                                                                                    }
+                                                                                    ?>
+                                                                                    <option
+                                                                                        <?php if (isset($brandFilterIdArray[$c3sub['id']][$brand['value']])): ?>selected="1"<?php endif; ?>
+                                                                                        value="<?= $brand['value']; ?>"><?= $brand['label']; ?></option>
+                                                                                <?php endforeach; ?>
+                                                                            </select>
+                                                                        </div>
+
+                                                                        <div id="id<?= $c3sub['id']; ?>pricesettings"
+                                                                             class="price-settings">
+                                                                            <label><?= __('Price group:') ?></label>
+                                                                            <select
+                                                                                name="price-settings-id<?= $c3sub['id']; ?>">
+                                                                                <?php foreach ($priceGroupArray as $pg): ?>
+                                                                                    <option
+                                                                                        <?php if (isset($priceGroupIdArray[$c3sub['id']]) && $priceGroupIdArray[$c3sub['id']] == $pg['value']): ?>selected="1"<?php endif; ?>
+                                                                                        value="<?= $pg['value']; ?>"><?= $pg['label']; ?></option>
+                                                                                <?php endforeach; ?>
+                                                                            </select>
+                                                                        </div>
+
+                                                                        <?php
+                                                                        $catLevel4 = $helper->getCategoriesLevelParent($c3sub['id']);
+                                                                        if (count($catLevel4) > 0): ?>
+                                                                            <ul>
+                                                                                <?php $i4 = $i3 + 20;
+                                                                                foreach ($catLevel4 as $c4sub): ?>
+                                                                                    <li style="margin-left: <?= $i4; ?>px; background-color: #D3D3D3;">
+                                                                                        <input
+                                                                                            id="id<?= $c4sub['id']; ?>"
+                                                                                            <?php if (isset($categoriesIdArray[$c4sub['id']])): ?> checked="checked" <?php endif; ?>
+                                                                                            type="checkbox"
+                                                                                            name="cats[]"
+                                                                                            value="<?= $c4sub['id']; ?>">
+                                                                                        <label
+                                                                                            for="id<?= $c4sub['id']; ?>"><?= $c4sub['name'] ?>
+                                                                                            [<?= $c4sub['id']; ?>
+                                                                                            ]</label>
+
+                                                                                        <div
+                                                                                            id="id<?= $c4sub['id']; ?>brandfilter"
+                                                                                            class="brand-filter">
+                                                                                            <select
+                                                                                                name="brand-filter-id<?= $c4sub['id']; ?>[]"
+                                                                                                multiple size="5">
+                                                                                                <?php foreach ($brandsArray as $brand):
+
+                                                                                                    if (isset($brandsInCategoryArray[$brand['value']])) {
+                                                                                                        if (!isset($brandsInCategoryArray[$brand['value']][$c4sub['id']])) {
+                                                                                                            continue;
+                                                                                                        }
+                                                                                                    } else {
+                                                                                                        continue;
+                                                                                                    }
+                                                                                                    ?>
+                                                                                                    <option
+                                                                                                        <?php if (isset($brandFilterIdArray[$c4sub['id']]) && isset($brandFilterIdArray[$c4sub['id']][$brand['value']])): ?>selected="1"<?php endif; ?>
+                                                                                                        value="<?= $brand['value']; ?>"><?= $brand['label']; ?></option>
+                                                                                                <?php endforeach; ?>
+                                                                                            </select>
+                                                                                        </div>
+
+                                                                                        <div
+                                                                                            id="id<?= $c4sub['id']; ?>pricesettings"
+                                                                                            class="price-settings">
+                                                                                            <label><?= __('Price group:') ?></label>
+                                                                                            <select
+                                                                                                name="price-settings-id<?= $c4sub['id']; ?>">
+                                                                                                <?php foreach ($priceGroupArray as $pg): ?>
+                                                                                                    <option
+                                                                                                        <?php if (isset($priceGroupIdArray[$c4sub['id']]) && $priceGroupIdArray[$c4sub['id']] == $pg['value']): ?>selected="1"<?php endif; ?>
+                                                                                                        value="<?= $pg['value']; ?>"><?= $pg['label']; ?></option>
+                                                                                                <?php endforeach; ?>
+                                                                                            </select>
+                                                                                        </div>
+
+
+                                                                                        <!--
+                                                                                        here can add next levels
+                                                                                        -->
+
+
+                                                                                    </li>
+                                                                                <?php endforeach; ?>
+                                                                            </ul>
+                                                                        <?php endif; ?>
+                                                                    </li>
+                                                                <?php endforeach; ?>
+                                                            </ul>
+                                                        <?php endif; ?>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php
+                                        endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
+    </fieldset>
+</div>
+
+<style>
+    ul.feed-export-categories-settings-list {
+        list-style: none;
+    }
+
+    ul.feed-export-categories-settings-list li {
+        margin-top: 5rem;
+        margin-left: 0;
+        padding: 10px;
+    }
+
+    .brand-filter {
+        margin-left: 2rem;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+    }
+
+    .brand-filter select {
+        width: 20rem;
+    }
+</style>

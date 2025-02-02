@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Magefast_ExportFeed::list" title="Export Products" translate="title" module="Magento_Backend" sortOrder="35" parent="Magento_Backend::marketing"  resource="Magefast_ExportFeed::list"/>
+        <add id="Magefast_ExportFeed::feed" title="Export Feed files" translate="title" module="Magefast_ExportFeed" sortOrder="10" parent="Magefast_ExportFeed::list" action="magefast_exportfeed/feed" resource="Magefast_ExportFeed::feed"/>
+    </menu>
+</config>
+
+
+
